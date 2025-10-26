@@ -1,0 +1,1 @@
+"""Tests for Markdown2Notion MCP server."""
