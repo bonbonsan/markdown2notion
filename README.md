@@ -17,7 +17,7 @@ A Model Context Protocol (MCP) server for uploading Markdown files to Notion. Th
 1. **Clone the repository:**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/bonbonsan/markdown2notion.git
 cd markdown2notion
 ```
 
@@ -197,7 +197,3 @@ markdown2notion/
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
-
-## 📄 License
-
-MIT License - see LICENSE file for details

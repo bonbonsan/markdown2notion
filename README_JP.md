@@ -15,7 +15,7 @@ MarkdownファイルをNotionページに効率的にアップロードするた
 
 1. **リポジトリのクローン:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/bonbonsan/markdown2notion.git
 cd markdown2notion
 ```
 
@@ -201,7 +201,3 @@ pytest tests/ --cov=src
 3. 変更を実装
 4. 適用可能な場合はテストを追加
 5. プルリクエストを送信
-
-## 📄 ライセンス
-
-MIT License - 詳細はLICENSEファイルを参照
