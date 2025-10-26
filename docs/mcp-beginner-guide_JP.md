@@ -60,7 +60,7 @@ AIアシスタント（クライアント） ←→ MCPサーバー ←→ あ�
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-username/markdown2notion.git
+git clone https://github.com/bonbonsan/markdown2notion.git
 cd markdown2notion
 
 # 依存関係をインストール

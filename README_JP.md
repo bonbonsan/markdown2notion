@@ -164,8 +164,6 @@ markdown2notion/
 ├── docs/
 │   ├── design.md          # アーキテクチャドキュメント
 │   └── api/               # 詳細APIドキュメント
-├── examples/
-│   └── sample-document.md # サンプルMarkdownファイル
 ├── tests/                 # テストスイート
 ├── .env.example          # 環境変数テンプレート
 ├── pyproject.toml        # プロジェクト設定

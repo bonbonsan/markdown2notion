@@ -70,7 +70,7 @@ AI Assistant (Client) ←→ MCP Server ←→ Your Tools/Data
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/markdown2notion.git
+git clone https://github.com/bonbonsan/markdown2notion.git
 cd markdown2notion
 
 # Install dependencies  
