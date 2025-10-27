@@ -47,27 +47,147 @@ echo "NOTION_TOKEN=your_notion_api_token_here" > .env
 
 ### As MCP Server (Recommended)
 
-Configure in your MCP client settings (like Claude Desktop's `cline_mcp_settings.json`):
+#### Cline (VS Code Extension)
 
-```json
-{
-  "mcpServers": {
-    "markdown2notion": {
-      "command": "python",
-      "args": ["/path/to/markdown2notion/src/server.py"],
-      "env": {
-        "NOTION_TOKEN": "your_notion_api_token_here"
-      }
-    }
-  }
-}
+1. **Set up virtual environment and install dependencies:**
+
+   ```bash
+   cd markdown2notion
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+2. Open the Command Palette → `Cline: Open MCP Settings`.
+3. Add or update `cline_mcp_settings.json` with:
+
+   ```json
+   {
+     "mcpServers": {
+       "markdown2notion": {
+         "command": "/absolute/path/to/markdown2notion/.venv/bin/python",
+         "args": ["/absolute/path/to/markdown2notion/src/server.py"]
+       }
+     }
+   }
+   ```
+
+   **⚠️ Important Notes:**
+   - Use **absolute paths** for both `command` and `args`
+   - Point `command` to the virtual environment's Python interpreter
+   - Replace `/absolute/path/to/markdown2notion` with your actual project path
+   - Example for macOS/Linux: `/Users/username/Documents/markdown2notion/.venv/bin/python`
+   - Example for Windows: `C:\Users\username\Documents\markdown2notion\.venv\Scripts\python.exe`
+
+4. **Restart VS Code** (not just Cline) after saving the configuration file.
+
+#### Claude Code (VS Code Extension)
+
+1. **Set up virtual environment and install dependencies:**
+
+   ```bash
+   cd markdown2notion
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+2. **Create workspace settings** in your project:
+   Create `.vscode/settings.json` in your project root with:
+
+   ```json
+   {
+     "claude.mcpServers": {
+       "markdown2notion": {
+         "command": "/absolute/path/to/markdown2notion/.venv/bin/python",
+         "args": ["/absolute/path/to/markdown2notion/src/server.py"],
+         "enabled": true
+       }
+     }
+   }
+   ```
+
+   **⚠️ Important Notes:**
+   - Use **absolute paths** for both `command` and `args`
+   - Point `command` to the virtual environment's Python interpreter
+   - Replace `/absolute/path/to/markdown2notion` with your actual project path
+   - Example for macOS/Linux: `/Users/username/Documents/markdown2notion/.venv/bin/python`
+   - Example for Windows: `C:\Users\username\Documents\markdown2notion\.venv\Scripts\python.exe`
+
+#### Claude Desktop (Standalone App)
+
+1. **Set up virtual environment and install dependencies:**
+
+   ```bash
+   cd markdown2notion
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+2. In Claude Desktop, click **Claude → Settings → Developer → Open configuration file**.
+3. Add the following entry to `claude_desktop_config.json` (macOS) or the equivalent config file on your platform:
+
+   ```json
+   {
+     "mcpServers": {
+       "markdown2notion": {
+         "command": "/absolute/path/to/markdown2notion/.venv/bin/python",
+         "args": ["/absolute/path/to/markdown2notion/src/server.py"],
+         "enabled": true
+       }
+     }
+   }
+   ```
+
+   **⚠️ Important Notes:**
+   - Use **absolute paths** for both `command` and `args`
+   - Point `command` to the virtual environment's Python interpreter
+   - Replace `/absolute/path/to/markdown2notion` with your actual project path
+   - Example for macOS/Linux: `/Users/username/Documents/markdown2notion/.venv/bin/python`
+   - Example for Windows: `C:\Users\username\Documents\markdown2notion\.venv\Scripts\python.exe`
+
+4. **Restart Claude Desktop** after saving the configuration file.
+
+**Note:** When the server runs from this repository it reads the `NOTION_TOKEN` from your local `.env` file. Make sure you have created the `.env` file with your Notion API token as described in the Installation section.
+
+## 🔍 Troubleshooting
+
+### MCPサーバー接続の問題
+
+もしCLINEやClaude Desktopで「MCPサーバーが接続されていない」というエラーが表示される場合：
+
+1. **仮想環境のPythonパスを確認**: 設定ファイルで絶対パスを使用していることを確認
+2. **依存関係のインストール**: `pip install -r requirements.txt`が仮想環境内で実行されていることを確認
+3. **アプリケーションの再起動**: VS Code（CLINE使用時）またはClaude Desktopを完全に再起動
+4. **パスの確認**: 設定ファイル内のパスが実際のファイル場所と一致することを確認
+
+### Pythonスクリプトを直接実行
+
+MCPサーバーが動作しない場合の回避策として、Pythonスクリプトを直接実行できます：
+
+```bash
+# 仮想環境をアクティベート
+source .venv/bin/activate  # macOS/Linux
+# または
+.venv\Scripts\activate  # Windows
+
+# スクリプトを実行
+python -c "
+from src.notion_uploader import NotionUploader
+uploader = NotionUploader()
+page_id = uploader.upload_markdown_file(
+    filepath='/path/to/your/file.md',
+    parent_url='https://www.notion.so/your-parent-page-url'
+)
+print(f'Uploaded! Page ID: {page_id}')
+"
 ```
-
-**Note:** The server automatically loads the `NOTION_TOKEN` from your `.env` file.
 
 ### Direct Usage
 
 You can also use the components directly:
+
 ```python
 from src.notion_uploader import NotionUploader
 
@@ -116,32 +236,84 @@ List existing pages in a database for reference.
 
 Get information about a specific database.
 
+## 💬 プロンプト実行例
+
+MCPサーバーが正常に設定されていれば、以下のようなプロンプトでMarkdownファイルをNotionにアップロードできます。
+
+### CLINE（VS Code拡張）での使用例
+
+```text
+このMarkdownファイルをNotionにアップロードしてください:
+/Users/username/Documents/my-notes.md
+
+親ページURLはこちらです:
+https://www.notion.so/16132a3709e4816cb512e4d73d345003
+```
+
+CLINEが自動的に`upload_markdown`ツールを呼び出し、以下のような結果が表示されます：
+
+```text
+Successfully uploaded 'my-notes.md' to Notion.
+Page ID: 29932a37-09e4-819d-a790-e8c025f28af5
+View at: https://www.notion.so/29932a3709e4819da790e8c025f28af5
+```
+
+### Claude Code（Claude Desktop）での使用例
+
+```text
+以下のMarkdownコンテンツを「週報 2024年10月」というタイトルでNotionページに変換してください：
+
+# 今週の進捗
+- プロジェクトAの設計完了
+- バグ修正3件対応
+
+## 来週の予定
+- 実装開始
+- コードレビュー
+
+親ページ: https://www.notion.so/work-reports-abc123def456
+```
+
+Claude Codeが`upload_markdown_content`ツールを使用し、以下のような応答をします：
+
+```text
+Successfully uploaded content as '週報 2024年10月' to Notion.
+Page ID: 12345678-90ab-cdef-1234-567890abcdef
+View at: https://www.notion.so/12345678090abcdef1234567890abcdef
+```
+
+### データベース指定での使用例
+
+```text
+この研究ノートをNotionのデータベースにアップロードしてください：
+- ファイル: /Users/username/research/ml-paper-summary.md
+- データベースID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+- タイトルはファイル名を使用
+```
+
+### 複数ファイルの一括アップロード例
+
+```text
+以下のMarkdownファイルをすべて同じ親ページにアップロードしてください：
+1. /path/to/chapter1.md
+2. /path/to/chapter2.md  
+3. /path/to/chapter3.md
+
+親ページ: https://www.notion.so/book-draft-xyz789
+```
+
+**注意**: MCPサーバーが接続されていない場合、CLINEは自動的にPythonスクリプトの直接実行にフォールバックします。
+
 ## 📖 Examples
 
-### Upload a file using URL (easiest)
+Upload Markdown content directly:
 
-```bash
-upload_markdown(
-    filepath="/path/to/document.md", 
-    parent_url="https://www.notion.so/16132a3709e4816cb512e4d73d345003"
-)
-```
+- `content`: Your markdown content as text (required)
+- `title`: Page title (required)
+- `parent_url`: Notion page URL (recommended)
+- `database_id` or `parent_page_id`: Alternative target specification
 
-### Upload a file to a database
-
-```bash
-upload_markdown("/path/to/document.md", database_id="abc123...")
-```
-
-### Upload content directly
-
-```bash
-upload_markdown_content(
-    content="# My Title\nSome content", 
-    title="My Page", 
-    parent_url="https://notion.so/parent-page"
-)
-```
+**注意**: MCPサーバーが接続されていない場合、CLINEは自動的にPythonスクリプトの直接実行にフォールバックします。
 
 ## 📝 Supported Markdown Elements
 
@@ -189,11 +361,3 @@ markdown2notion/
 ├── pyproject.toml        # Project configuration
 └── README.md            # This file
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request

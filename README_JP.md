@@ -42,20 +42,47 @@ echo "NOTION_TOKEN=your_notion_api_token_here" > .env
 
 ### MCPサーバーとしての使用（推奨）
 
-MCPクライアント設定（Claude Desktopの`cline_mcp_settings.json`など）で設定:
+#### Cline（VS Code拡張機能）の設定
 
-```json
-{
-  "mcpServers": {
-    "markdown2notion": {
-      "command": "python",
-      "args": ["/path/to/markdown2notion/src/server.py"]
-    }
-  }
-}
-```
+1. コマンドパレットで `Cline: Open MCP Settings` を実行。
+2. `cline_mcp_settings.json` に以下を追記（または更新）：
 
-**注意:** サーバーは自動的に`.env`ファイルから`NOTION_TOKEN`を読み込みます。
+   ```json
+   {
+     "mcpServers": {
+       "markdown2notion": {
+         "command": "python",
+         "args": ["/absolute/path/to/markdown2notion/src/server.py"],
+         "env": {
+           "NOTION_TOKEN": "your_notion_api_token_here"
+         }
+       }
+     }
+   }
+   ```
+
+   保存後にCline（VS Code）を再起動またはリロードしてください。
+
+#### Claude Code（Claude Desktopアプリ）の設定
+
+1. Claude Desktopで **Claude → Settings → Developer → Open configuration file** を開く。
+2. macOSなら `claude_desktop_config.json`（他OSは同等ファイル）に以下を追加：
+
+   ```json
+   {
+     "mcpServers": {
+       "markdown2notion": {
+         "command": "python",
+         "args": ["/absolute/path/to/markdown2notion/src/server.py"],
+         "enabled": true
+       }
+     }
+   }
+   ```
+
+   変更後はClaude Codeを再起動して設定を反映させてください。
+
+**注意:** リポジトリ直下でサーバーを起動すると `.env` から `NOTION_TOKEN` を自動読み込みします。環境変数が既に設定済みであれば `env` ブロックは省略可能です。
 
 ### 直接使用
 
@@ -193,11 +220,3 @@ pytest tests/ --cov=src
 - **Black**: コードフォーマッター
 - **MyPy**: 静的型チェック
 - **Pytest**: テストフレームワーク
-
-## 🤝 貢献
-
-1. リポジトリをフォーク
-2. 機能ブランチを作成
-3. 変更を実装
-4. 適用可能な場合はテストを追加
-5. プルリクエストを送信

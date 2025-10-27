@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "markdown2notion": {
+      "command": "/Users/kentookubo/Documents/Projects/utilities/markdown2notion/.venv/bin/python",
+      "args": ["/Users/kentookubo/Documents/Projects/utilities/markdown2notion/src/server.py"],
+      "enabled": true
+    }
+  }
+}
